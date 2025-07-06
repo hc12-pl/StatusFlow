@@ -9,12 +9,12 @@ import (
 type PortCheckResult struct {
 	Host string
 	Port int
-	Sucess bool
+	Success bool
 	Duration time.Duration
 	Error string
 }
 
-func TestPort(host string, port int, timeout time.Duration) PortCheckResult {
+func TestPort(host string, port int, protocol string, timeout time.Duration) PortCheckResult {
 	address := fmt.Sprintf("%s:%d", host, port)
 	start := time.Now()
 	conn, err := net.DialTimeout("tcp", address, timeout)
@@ -24,7 +24,7 @@ func TestPort(host string, port int, timeout time.Duration) PortCheckResult {
 		return PortCheckResult{
 			Host:    host,
 			Port:    port,
-			Sucess:  false,
+			Success:  false,
 			Duration: duration,
 			Error:   err.Error(),
 		}
@@ -34,7 +34,7 @@ func TestPort(host string, port int, timeout time.Duration) PortCheckResult {
 	return PortCheckResult{
 		Host:    host,
 		Port:    port,
-		Sucess:  true,
+		Success:  true,
 		Duration: duration,
 		Error:   "",	
 	}

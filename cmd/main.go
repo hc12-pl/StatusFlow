@@ -4,20 +4,21 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/widget"
+
+	"statusFlow/gui/pages"
 )
 
 func main() {
-	a := app.New()
-	w := a.NewWindow(("StatusFlow"))
+	myApp := app.New()
+	myWindow := myApp.NewWindow("StatusFlow")
 
-	w.SetContent(
-		container.NewVBox(
-			widget.NewLabel("Welcome to StatusFlow!"),
-		),
+	portTestPage := gui.NewPortTestPage()
+
+	content := container.NewAppTabs(
+		container.NewTabItem("TCP Port", portTestPage),
 	)
 
-	w.Resize(fyne.NewSize(400, 300))
-
-	w.ShowAndRun()
+	myWindow.SetContent(content)
+	myWindow.Resize(fyne.NewSize(500, 400))
+	myWindow.ShowAndRun()
 }

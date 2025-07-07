@@ -13,9 +13,11 @@ func main() {
 	myWindow := myApp.NewWindow("StatusFlow")
 
 	portTestPage := gui.NewPortTestPage()
+	webTestPage := gui.NewWebTestPage()
 
 	content := container.NewAppTabs(
 		container.NewTabItem("TCP Port", portTestPage),
+		container.NewTabItem("Website", webTestPage),
 	)
 
 	myWindow.SetContent(content)

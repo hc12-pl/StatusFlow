@@ -1,49 +1,49 @@
 package webcheck
 
 import (
-	"fmt"
-	"net"
+	"net/http"
+	"strings"
 	"time"
+	"fmt"
 )
 
-type PortCheckResult struct {
-	Host string
-	Type string
-	Success bool
-	Duration time.Duration
-	Error string
+type HTTPStatusResult struct {
+	URL        string
+	StatusCode int
+	Status     string
+	Error      string
+	Duration   time.Duration
 }
 
-
-func TestWeb(host string, webtype string, protocol string, timeout time.Duration) PortCheckResult {
-	port := 0
-	switch webtype {
-		case "http":
-			port = 80
-		case "https":
-			port = 443
+func CheckHTTPStatus(protocol, rawHost string, timeout time.Duration) HTTPStatusResult {
+	if protocol != "http" && protocol != "https" {
+		protocol = "http" // fallback
 	}
-	address := net.JoinHostPort(host, fmt.Sprintf("%d", port))
+
+	// Ensure proper URL formatting
+	url := rawHost
+	if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
+		url = fmt.Sprintf("%s://%s", protocol, rawHost)
+	}
+
+	client := http.Client{Timeout: timeout}
 	start := time.Now()
-	conn, err := net.DialTimeout("tcp", address, timeout)
-	duration := time.Since((start))
+	resp, err := client.Get(url)
+	duration := time.Since(start)
 
 	if err != nil {
-		return PortCheckResult{
-			Host:    host,
-			Type:    webtype,
-			Success:  false,
+		return HTTPStatusResult{
+			URL:      url,
+			Error:    err.Error(),
 			Duration: duration,
-			Error:   err.Error(),
 		}
 	}
+	defer resp.Body.Close()
 
-	conn.Close()
-	return PortCheckResult{
-		Host:    host,
-		Type:    webtype,
-		Success:  true,
-		Duration: duration,
-		Error:   "",	
+	return HTTPStatusResult{
+		URL:        url,
+		StatusCode: resp.StatusCode,
+		Status:     resp.Status,
+		Duration:   duration,
 	}
 }

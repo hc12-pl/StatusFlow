@@ -3,6 +3,7 @@ package gui
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -16,8 +17,8 @@ func NewWebTestPage() fyne.CanvasObject {
 	hostEntry := widget.NewEntry()
 	hostEntry.SetPlaceHolder("Enter host (e.g., example.com)")
 
-	protocolSelect := widget.NewSelect([]string{"http", "https"}, func(value string) {})
-	protocolSelect.SetSelected("https")
+	protocolSelect := widget.NewSelect([]string{"http", "https"}, nil)
+	protocolSelect.SetSelected("http")
 
 	timeoutEntry := widget.NewEntry()
 	timeoutEntry.SetPlaceHolder("Timeout in seconds (e.g., 2)")
@@ -25,29 +26,35 @@ func NewWebTestPage() fyne.CanvasObject {
 	resultLabel := widget.NewLabel("")
 
 	checkBtn := widget.NewButton("Check Website", func() {
-		host := hostEntry.Text
-		webtype := protocolSelect.Selected
+		rawHost := strings.TrimSpace(hostEntry.Text)
+		protocol := protocolSelect.Selected
 		timeoutStr := timeoutEntry.Text
 
 		timeoutSec, err := strconv.Atoi(timeoutStr)
 		if err != nil {
-			resultLabel.SetText("Invalid timeout")
+			resultLabel.SetText("❌ Invalid timeout")
+			return
+		}
+
+		if rawHost == "" {
+			resultLabel.SetText("❌ Host cannot be empty")
 			return
 		}
 
 		resultLabel.SetText("⏳ Checking...")
 		go func() {
-			res := webcheck.TestWeb(host, webtype, "tcp", time.Duration(timeoutSec)*time.Second)
-			text := ""
+			res := webcheck.CheckHTTPStatus(protocol, rawHost, time.Duration(timeoutSec)*time.Second)
 
-			if res.Success {
-				text = fmt.Sprintf("[%s] %s is reachable (time: %s)", res.Type, res.Host, res.Duration)
+			var text string
+			if res.Error != "" {
+				text = fmt.Sprintf("❌ Error: %s", res.Error)
 			} else {
-				text = fmt.Sprintf("Error: %s", res.Error)
+				text = fmt.Sprintf("✅ %s - Status: %d (%s) in %s",
+					res.URL, res.StatusCode, res.Status, res.Duration)
 			}
 
 			fyne.CurrentApp().SendNotification(&fyne.Notification{
-				Title:   "Web check result",
+				Title:   "Web Check Result",
 				Content: text,
 			})
 
@@ -58,7 +65,7 @@ func NewWebTestPage() fyne.CanvasObject {
 	})
 
 	return container.NewVBox(
-		widget.NewLabel("HTTP/HTTPS Web Check"),
+		widget.NewLabel("HTTP/HTTPS Web Status Checker"),
 		hostEntry,
 		protocolSelect,
 		timeoutEntry,

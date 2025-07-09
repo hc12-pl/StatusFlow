@@ -14,10 +14,12 @@ func main() {
 
 	portTestPage := gui.NewPortTestPage()
 	webTestPage := gui.NewWebTestPage()
+	icmpTestPage := gui.NewIcmpTestPage()
 
 	content := container.NewAppTabs(
 		container.NewTabItem("TCP Port", portTestPage),
 		container.NewTabItem("Website", webTestPage),
+		container.NewTabItem("ICMP", icmpTestPage),
 	)
 
 	myWindow.SetContent(content)

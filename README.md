@@ -14,7 +14,7 @@ Projekt jest w fazie rozwoju – zapraszam do śledzenia postępów i współtwo
 - [x] HTTP
 - [x] TCP
 - [ ] DNS
-- [ ] ICMP (ping)
+- [X] ICMP (ping)
 - [ ] Harmonogram testów
 - [ ] Eksport logów
 - [ ] System powiadomień

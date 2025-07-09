@@ -14,6 +14,8 @@ import (
 
 func NewPortTestPage() fyne.CanvasObject {
 
+	protocolSelect := widget.NewSelect([]string{"tcp", "udp"}, nil)
+	protocolSelect.SetSelected("tcp")
 	hostEntry := widget.NewEntry()
 	hostEntry.SetPlaceHolder("Enter host (e.g., google.com)")
 
@@ -47,11 +49,11 @@ func NewPortTestPage() fyne.CanvasObject {
 
 
 		go func() {
-			res := portcheck.TestPort(host, port, "tcp", time.Duration(timeoutSec)*time.Second)
+			res := portcheck.TestPort(host, port, protocolSelect.Selected, time.Duration(timeoutSec)*time.Second)
 			text := ""
 
 			if res.Success {
-				text = fmt.Sprintf("Port %d on %s is open (time: %s)", res.Port, res.Host, res.Duration)
+				text = fmt.Sprintf("%s Port %d on %s is open (time: %s)", protocolSelect.Selected, res.Port, res.Host, res.Duration)
 			} else {
 				text = fmt.Sprintf("Error: %s", res.Error)
 			}
@@ -74,6 +76,7 @@ func NewPortTestPage() fyne.CanvasObject {
 		widget.NewLabel("TCP Port Check"),
 		hostEntry,
 		portEntry,
+		protocolSelect,
 		timeoutEntry,
 		checkBtn,
 		widget.NewSeparator(),

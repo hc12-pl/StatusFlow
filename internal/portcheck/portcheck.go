@@ -17,7 +17,7 @@ type PortCheckResult struct {
 func TestPort(host string, port int, protocol string, timeout time.Duration) PortCheckResult {
 	address := net.JoinHostPort(host, fmt.Sprintf("%d", port))
 	start := time.Now()
-	conn, err := net.DialTimeout("tcp", address, timeout)
+	conn, err := net.DialTimeout(protocol, address, timeout)
 	duration := time.Since((start))
 
 	if err != nil {

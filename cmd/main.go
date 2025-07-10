@@ -6,9 +6,14 @@ import (
 	"fyne.io/fyne/v2/container"
 
 	"statusFlow/gui/pages"
+	"statusFlow/internal/database"
 )
 
 func main() {
+	// Initialize the database connection
+	database.InitDB()
+	defer database.DB.Close()
+
 	myApp := app.New()
 	myWindow := myApp.NewWindow("StatusFlow")
 

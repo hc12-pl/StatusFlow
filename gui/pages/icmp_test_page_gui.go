@@ -9,6 +9,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 
+	"statusFlow/internal/logger"
 	"statusFlow/internal/pingcheck"
 )
 
@@ -47,6 +48,7 @@ func NewIcmpTestPage() fyne.CanvasObject {
 			} else {
 				text = fmt.Sprintf("Error: %s", res.Error)
 			}
+			logger.SaveLog(text)
 
 			fyne.CurrentApp().SendNotification(&fyne.Notification{
 				Title: "ICMP check result",

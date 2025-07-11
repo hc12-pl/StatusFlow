@@ -10,6 +10,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 
+	"statusFlow/internal/logger"
 	"statusFlow/internal/webcheck"
 )
 
@@ -52,6 +53,7 @@ func NewWebTestPage() fyne.CanvasObject {
 				text = fmt.Sprintf("✅ %s - Status: %d (%s) in %s",
 					res.URL, res.StatusCode, res.Status, res.Duration)
 			}
+			logger.SaveLog(text)
 
 			fyne.CurrentApp().SendNotification(&fyne.Notification{
 				Title:   "Web Check Result",

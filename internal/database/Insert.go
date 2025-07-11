@@ -11,7 +11,6 @@ import (
 func InsertLog(text string) error {
 	log.Printf("InsertLog called with %s", text)
 	return DB.Update(func(tx *bbolt.Tx) error {
-		log.Print("return started")
 		bucket := tx.Bucket([]byte("Logs"))
 		if bucket == nil {
 			return fmt.Errorf("bucket Logs not found")

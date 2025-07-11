@@ -1,6 +1,7 @@
 package icmpcheck
 
 import (
+
 	"time"
 
 	"github.com/go-ping/ping"

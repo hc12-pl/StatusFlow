@@ -9,6 +9,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 
+	"statusFlow/internal/logger"
 	"statusFlow/internal/portcheck"
 )
 
@@ -36,12 +37,14 @@ func NewPortTestPage() fyne.CanvasObject {
 		port, err := strconv.Atoi(portStr)
 		if err != nil {
 			resultLabel.SetText("Incorrect port")
+			logger.SaveLog(err.Error())
 			return
 		}
 
 		timeoutSec, err := strconv.Atoi(timeoutStr)
 		if err != nil {
 			resultLabel.SetText("Incorrect timeout")
+			logger.SaveLog(err.Error())
 			return
 		}
 
@@ -57,6 +60,7 @@ func NewPortTestPage() fyne.CanvasObject {
 			} else {
 				text = fmt.Sprintf("Error: %s", res.Error)
 			}
+			logger.SaveLog(text)
 
 			fyne.CurrentApp().SendNotification(&fyne.Notification{
 				Title:   "Port check result",

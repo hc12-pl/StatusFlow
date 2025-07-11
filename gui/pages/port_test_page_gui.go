@@ -77,7 +77,7 @@ func NewPortTestPage() fyne.CanvasObject {
 	
 
 	return container.NewVBox(
-		widget.NewLabel("TCP Port Check"),
+		widget.NewLabel("Port Check"),
 		hostEntry,
 		portEntry,
 		protocolSelect,

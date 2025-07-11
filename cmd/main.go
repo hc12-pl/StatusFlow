@@ -20,12 +20,15 @@ func main() {
 	portTestPage := gui.NewPortTestPage()
 	webTestPage := gui.NewWebTestPage()
 	icmpTestPage := gui.NewIcmpTestPage()
+	dnsCheckPage := gui.NewDnsTestPage()
 	logsPage := gui.NewLogsPage()
+
 
 	content := container.NewAppTabs(
 		container.NewTabItem("TCP Port", portTestPage),
 		container.NewTabItem("Website", webTestPage),
 		container.NewTabItem("ICMP", icmpTestPage),
+		container.NewTabItem("DNS Check", dnsCheckPage),
 		container.NewTabItem("Logs", logsPage),
 	)
 

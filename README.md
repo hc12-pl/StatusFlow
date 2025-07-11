@@ -13,7 +13,7 @@ Projekt jest w fazie rozwoju – zapraszam do śledzenia postępów i współtwo
 ## 🔍 W planie testy:
 - [x] HTTP
 - [x] TCP
-- [ ] DNS
+- [X] DNS
 - [X] ICMP (ping)
 - [ ] Harmonogram testów
 - [ ] Eksport logów
